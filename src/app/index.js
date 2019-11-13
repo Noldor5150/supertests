@@ -49,9 +49,7 @@ class App extends React.Component {
         isEdit: false
       }
     ],
-    error: null,
-    tempPrice: [],
-    tempQuantity: []
+    error: null
   };
 
   toggleActive = id => {
@@ -64,6 +62,21 @@ class App extends React.Component {
     });
     this.setState({ products: changedProducts });
   };
+  // enableEdit = id => {
+  //   const { products } = this.state;
+  //   console.log(products.filter(product => product.isEdit));
+  //   if (products.filter(product => product.isEdit === true)) {
+  //     this.setState({ products: products });
+  //   } else {
+  //     const changedProducts = products.map(product => {
+  //       if (product.id === id) {
+  //         product.isEdit = true;
+  //       }
+  //       return product;
+  //     });
+  //     this.setState({ products: changedProducts });
+  //   }
+  // };
   enableEdit = id => {
     const { products } = this.state;
     const changedProducts = products.map(product => {
@@ -81,44 +94,18 @@ class App extends React.Component {
     });
   };
 
-  saveEditedFromList = id => {
-    const { products, tempPrice, tempQuantity } = this.state;
-    if (tempPrice.includes(id) && tempQuantity.includes(id)) {
-      const newestPrices = tempPrice.filter(price => price.id === id);
-      const newestQuantitys = tempQuantity.filter(
-        quantity => quantity.id === id
-      );
-      const changedProducts = products.map(product => {
-        if (product.id === id) {
-          product.isEdit = false;
-          product.quantity = newestQuantitys.quantity;
-          product.price = newestPrices.price;
-        }
-        return product;
-      });
-      this.setState({
-        products: changedProducts,
-        tempPrice: tempPrice.filter(price => price.id !== id),
-        tempQuantity: tempQuantity.filter(quantity => quantity.id !== id)
-      });
-    }
-  };
-
-  handlePrice = (newId, event) => {
-    const newPrice = { id: newId, price: event.target.value };
-    const { tempPrice } = this.state;
-    console.log(tempPrice);
-    const newestPrices = tempPrice.filter(price => price.id !== newId);
-    this.setState({ tempPrice: newestPrices.push(newPrice) });
-  };
-  handleQuantity = (newId, event) => {
-    const newQuantity = { id: newId, quantity: event.target.value };
-    const { tempQuantity } = this.state;
-    console.log(tempQuantity);
-    const newestQuantity = tempQuantity.filter(
-      quantity => quantity.id !== newId
-    );
-    this.setState({ tempPrice: newestQuantity.push(newQuantity) });
+  saveEditedFromList = (id, newQuantity, newPrice) => {
+    const { products } = this.state;
+    console.log(id, newQuantity, newPrice);
+    const changedProducts = products.map(product => {
+      if (product.id === id) {
+        product.isEdit = false;
+        product.quantity = newQuantity ? newQuantity : product.quantity;
+        product.price = newPrice ? newPrice : product.price;
+      }
+      return product;
+    });
+    this.setState({ products: changedProducts });
   };
   render() {
     const { products, error } = this.state;
@@ -133,11 +120,10 @@ class App extends React.Component {
                 <ProductsList
                   products={products}
                   error={error}
+                  // callbackFromParent={this.myCallback}
                   toggleActive={this.toggleActive}
                   deleteProduct={this.deleteProduct}
                   enableEdit={this.enableEdit}
-                  handlePrice={this.handlePrice}
-                  handleQuantity={this.handleQuantity}
                   saveEditedFromList={this.saveEditedFromList}
                 />
               )}

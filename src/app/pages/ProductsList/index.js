@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./index.scss";
 import {
@@ -19,21 +19,22 @@ function ProductsList({
   toggleActive,
   deleteProduct,
   enableEdit,
-  handlePrice,
-  handleQuantity,
   saveEditedFromList
 }) {
-  const keys = Object.keys(products[0]);
-  // let inputQuantity = null;
-  // let inputPrice = null;
-  // function handleQuantityChange(event) {
-  //   inputQuantity = event.target.value;
-  //   console.log(inputQuantity);
-  // }
-  // function handlePriceChange(event) {
-  //   inputPrice = event.target.value;
-  //   console.log(inputPrice);
-  // }
+  const keys = Object.keys(products[0]) || {};
+
+  const [inputQuantity, setInputQuantity] = useState(null);
+  const [inputPrice, setInputPrice] = useState(null);
+
+  function handleQuantityChange(event) {
+    setInputQuantity(event.target.value);
+    console.log(inputQuantity);
+  }
+
+  function handlePriceChange(event) {
+    setInputPrice(event.target.value);
+    console.log(inputPrice);
+  }
 
   return error ? (
     <div>{error} </div>
@@ -69,9 +70,7 @@ function ProductsList({
                     type="number"
                     margin="none"
                     defaultValue={quantity}
-                    onChange={() => {
-                      handleQuantity(id);
-                    }}
+                    onChange={handleQuantityChange}
                     onClick={() => {
                       enableEdit(id);
                     }}
@@ -83,9 +82,7 @@ function ProductsList({
                     type="number"
                     margin="none"
                     defaultValue={price}
-                    onChange={() => {
-                      handlePrice(id);
-                    }}
+                    onChange={handlePriceChange}
                     onClick={() => {
                       enableEdit(id);
                     }}
@@ -110,10 +107,10 @@ function ProductsList({
                       variant="contained"
                       color="secondary"
                       onClick={() => {
-                        console.log(id);
+                        console.log(id, inputQuantity, inputPrice);
 
-                        saveEditedFromList(id);
-                        console.log(id);
+                        saveEditedFromList(id, inputQuantity, inputPrice);
+                        console.log(id, inputQuantity, inputPrice);
                       }}
                     >
                       save
