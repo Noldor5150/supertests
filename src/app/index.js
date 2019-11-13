@@ -73,19 +73,19 @@ class App extends React.Component {
     });
   };
 
-  // saveEditedFromList(id, price, quantity) {
-  //   const { products } = this.state;
-  //   console.log(id, price, quantity);
-  //   const changedProducts = products.map(product => {
-  //     if (product.id === id) {
-  //       product.isEdit = false;
-  //       product.price = price;
-  //       product.quantity = quantity;
-  //     }
-  //     return product;
-  //   });
-  //   this.setState({ products: changedProducts });
-  // }
+  saveEditedFromList = (id, newQuantity, newPrice) => {
+    const { products } = this.state;
+    console.log(id, newQuantity, newPrice);
+    const changedProducts = products.map(product => {
+      if (product.id === id) {
+        product.isEdit = false;
+        product.quantity = newQuantity;
+        product.price = newPrice;
+      }
+      return product;
+    });
+    this.setState({ products: changedProducts });
+  };
   render() {
     const { products, error } = this.state;
     return (
@@ -103,6 +103,7 @@ class App extends React.Component {
                   toggleActive={this.toggleActive}
                   deleteProduct={this.deleteProduct}
                   enableEdit={this.enableEdit}
+                  saveEditedFromList={this.saveEditedFromList}
                 />
               )}
             />
