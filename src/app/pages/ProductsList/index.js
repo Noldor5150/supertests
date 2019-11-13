@@ -19,19 +19,21 @@ function ProductsList({
   toggleActive,
   deleteProduct,
   enableEdit,
+  handlePrice,
+  handleQuantity,
   saveEditedFromList
 }) {
   const keys = Object.keys(products[0]);
-  let inputQuantity = null;
-  let inputPrice = null;
-  function handleQuantityChange(event) {
-    inputQuantity = event.target.value;
-    console.log(inputQuantity);
-  }
-  function handlePriceChange(event) {
-    inputPrice = event.target.value;
-    console.log(inputPrice);
-  }
+  // let inputQuantity = null;
+  // let inputPrice = null;
+  // function handleQuantityChange(event) {
+  //   inputQuantity = event.target.value;
+  //   console.log(inputQuantity);
+  // }
+  // function handlePriceChange(event) {
+  //   inputPrice = event.target.value;
+  //   console.log(inputPrice);
+  // }
 
   return error ? (
     <div>{error} </div>
@@ -67,7 +69,9 @@ function ProductsList({
                     type="number"
                     margin="none"
                     defaultValue={quantity}
-                    onChange={handleQuantityChange}
+                    onChange={() => {
+                      handleQuantity(id);
+                    }}
                     onClick={() => {
                       enableEdit(id);
                     }}
@@ -79,7 +83,9 @@ function ProductsList({
                     type="number"
                     margin="none"
                     defaultValue={price}
-                    onChange={handlePriceChange}
+                    onChange={() => {
+                      handlePrice(id);
+                    }}
                     onClick={() => {
                       enableEdit(id);
                     }}
@@ -104,10 +110,10 @@ function ProductsList({
                       variant="contained"
                       color="secondary"
                       onClick={() => {
-                        console.log(id, inputQuantity, inputPrice);
+                        console.log(id);
 
-                        saveEditedFromList(id, inputQuantity, inputPrice);
-                        console.log(id, inputQuantity, inputPrice);
+                        saveEditedFromList(id);
+                        console.log(id);
                       }}
                     >
                       save
